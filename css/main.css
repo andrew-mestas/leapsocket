@@ -1,0 +1,13 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+#vm-info {
+    width: 100%;
+}
+#vm-info p{
+    display: inline-block;
+    width: 45%;
+}
+
