@@ -1,13 +1,76 @@
+/* suffer: #494955 */ 
+/*momento: #646476*/
+/*Intimidation: #ab9a9a*/
+/*Annabelle tears: #93cad6*/
+
 body {
-    background-color: black;
-    color: white;
+    background-color: #646476;
+    color: #efefef;
 }
 
 #vm-info {
     width: 100%;
+    padding: 12px;
+    border-bottom: 1px solid #494955;
+    background-color: #494955;
 }
+#new-section {
+    border-bottom: 1px solid #494955;
+}
+
+#new-section > input{
+    text-align: left;
+    height: 100%;
+    padding: 10px;
+    width: 49%;
+    font-size: 1em;
+    color: #efefef;
+    border: none;
+    background-color: transparent;
+    border-right: 1px solid #494955;
+}
+
 #vm-info p{
     display: inline-block;
     width: 45%;
+}
+
+#file-system li {
+    padding: 10px;
+}
+
+#file-system a {
+    display: inline-block;
+    width: 100%;
+    border-bottom: 1px solid rgba(255,255,255, .4);
+    text-decoration: none;
+    color: #efefef;
+}
+
+#file-system a .action-menu {
+    display: inline-block;
+}
+
+#file-system li::before {
+    background-size: 15px 15px; 
+    background-repeat: no-repeat; 
+    display: inline-block; 
+    margin-bottom: -2px;
+    margin-right: 8px; 
+    width: 15px; 
+    height: 15px; 
+    content: ""; 
+}
+
+.folder::before {
+    background-image: url('../img/folder_closed.svg');                
+}
+
+.file::before {
+    background-image: url('../img/file.svg');
+}
+
+.sub {
+    padding-left: 35px;
 }
 
