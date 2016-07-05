@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tester</title>
+	<style>
+		#folder{
+			height: 200px;
+			width: 400px;
+			background: blue;
+		}
+	</style>
+</head>
+
+<body>
+<!-- <div class="action-menu">
+ --><!-- files -->
+<!-- <img src="http://lorempixel.com/400/200"/><br> -->
+<input class="send" data-type="file" data-name="pic.jpg" data-currentDir="/" value="view" type="button" />
+<!-- <input class="send" data-type="file" data-name="pic.jpg" value="copy" type="button" />
+<input class="send" data-type="file" data-name="pic.jpg" value="paste" type="button" />
+<input class="send" data-type="file" data-name="pic.jpg" value="delete" type="button" />
+
+<input class="send" data-type="file" data-name="pic.jpg" value="make" type="button" />
+<input class="send" data-type="file" data-name="pic.jpg" value="move" type="button" />
+<input class="send" data-type="file" data-name="pic.jpg" value="rename" type="button" /> -->
+</div>
+
+<br>
+<!-- folders -->
+<!-- <div id="folder"> </div><br>
+<input class="send" data-type="folder" data-name="folderName" value="view" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="copy" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="paste" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="delete" type="button" />
+
+<input class="send" data-type="folder" data-name="folderName" value="make" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="rename" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="move" type="button" />
+ -->
+</body>
+<script>
+	
+function iterate(className) {
+ 	var list = document.getElementsByClassName(className);
+ 	return Object.keys(list).map((x)=> { return list[x]});
+};
+
+function addListenerByData(element) {
+	var action = element.target.getAttribute("value");
+	var filename = element.target.getAttribute("data-name");
+	var type = element.target.getAttribute("data-type");
+	var currentDir = element.target.getAttribute("data-currentDir");
+
+	if(action !== "make" && action !== "rename" && action !== "move"){
+		generateRequest(filename, action, currentDir);
+	} else {
+		alert("Multiple steps required")
+	}
+
+};
+
+function generateRequest(filename, action, currentDir){
+	var xhttp = new XMLHttpRequest();
+	var url = "http://localhost:3000/" + action;
+    xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      createElements(xhttp.responseText);
+    }
+  };
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send(JSON.stringify({filename: filename, currentDir: currentDir}));
+
+
+};
+
+function createElements(info) {
+	var actions = ["view","copy","paste","delete","make","move","rename"];
+	var elements = JSON.parse(info);
+	
+	iterate("action-menu").forEach((x)=> document.body.removeChild(x));
+
+	elements['filesAndFolders'].forEach((item)=>{
+
+	var menu = document.createElement("div");
+	menu.className = "action-menu"; 
+
+		actions.forEach((actionName)=>{
+			var options = document.createElement("input");
+			options.type = "button";
+			options.className = "send";
+			options.setAttribute("data-type", item.type);
+			options.setAttribute("data-name", item.name);
+			options.setAttribute("data-currentDir", elements["current"]);
+			options.value = actionName;
+			menu.appendChild(options);
+
+		});
+	document.body.appendChild(menu);
+
+	})
+iterate("send").forEach((x)=> x.addEventListener("click", addListenerByData));
+
+
+
+}
+
+iterate("send").forEach((x)=> x.addEventListener("click", addListenerByData));
+
+
+
+
+</script>
+</html>
