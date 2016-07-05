@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/andrew-mestas/leapsocket#readme",
   "dependencies": {
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "forEachAsync": "^3.0.0"
   }
 }
