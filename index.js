@@ -11,6 +11,7 @@ app.get('/', function(req, res) {
 
 
 app.post('/view', function(req, res) {
+	console.log(req)
   res.send("view");
 });
 
