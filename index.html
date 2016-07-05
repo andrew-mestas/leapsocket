@@ -3,14 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>VM File System</title>
+    <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
     <div id="vm-info">
-        <p>VM Name:</p>
-        <p>IP Address</p>
+        <p>$VM Name</p>
+        <p>$IP Address</p>
     </div>
-    Hello World
+    <div id="new-section">
+        <input type="button" value="+ Add File">
+        <input type="button" value="+ Add Folder">
+    </div>
+    <div id="file-system">
+        <ul>
+            <a href="">
+                <li class="file">File</li>
+                <div class="action-menu"><input type="button"></div>
+            </a>
+            <li class="folder">Folder</li>
+            <ul>
+                <li class="file">File</li>
+                <li class="file">File</li>
+                <li class="file">File</li>
+            </ul>
+            <li>File</li>
+            <li>Folder</li>
+            <li>Folder</li>
+        </ul>
+    </div>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="js/script.js"></script>
 </body>
