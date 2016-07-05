@@ -1,17 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>VM File System</title>
-    <link rel="stylesheet" href="css/main.css">
+	<title>Tester</title>
+	<style>
+		#folder{
+			height: 200px;
+			width: 400px;
+			background: blue;
+		}
+	</style>
 </head>
+
 <body>
-    <div id="vm-info">
-        <p>VM Name:</p>
-        <p>IP Address</p>
-    </div>
-    Hello World
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script src="js/script.js"></script>
+
+<!-- files -->
+<img src="http://lorempixel.com/400/200"/><br>
+<input class="send" data-type="file" data-name="pic.jpg" value="view" type="button" />
+<input class="send" data-type="file" data-name="pic.jpg" value="copy" type="button" />
+<input class="send" data-type="file" data-name="pic.jpg" value="paste" type="button" />
+<input class="send" data-type="file" data-name="pic.jpg" value="delete" type="button" />
+
+<input class="send" data-type="file" data-name="pic.jpg" value="make" type="button" />
+<input class="send" data-type="file" data-name="pic.jpg" value="move" type="button" />
+<input class="send" data-type="file" data-name="pic.jpg" value="rename" type="button" />
+<br>
+<!-- folders -->
+<div id="folder"> </div><br>
+<input class="send" data-type="folder" data-name="folderName" value="view" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="copy" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="paste" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="delete" type="button" />
+
+<input class="send" data-type="folder" data-name="folderName" value="make" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="rename" type="button" />
+<input class="send" data-type="folder" data-name="folderName" value="move" type="button" />
+
 </body>
+<script>
+	
+function iterate(className) {
+ 	var list = document.getElementsByClassName(className);
+ 	return Object.keys(list).map((x)=> { return list[x]});
+};
+
+function addListenerByData(element) {
+	var action = element.target.getAttribute("value");
+	var filename = element.target.getAttribute("data-name");
+	var type = element.target.getAttribute("data-type");
+
+	if(action !== "make" && action !== "rename" && action !== "move"){
+		generateRequest(filename, action);
+	} else {
+		alert("Multiple steps required")
+	}
+
+};
+
+function generateRequest(filename, action){
+	var xhttp = new XMLHttpRequest();
+	var url = "http://localhost:3000/" + action;
+    xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      console.log(xhttp.responseText);
+    }
+  };
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send(JSON.stringify(filename));
+
+
+};
+
+iterate("send").forEach((x)=> x.addEventListener("click", addListenerByData));
+
+
+
+
+</script>
 </html>
