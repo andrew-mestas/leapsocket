@@ -1,45 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Tester</title>
-	<style>
-		#folder{
-			height: 200px;
-			width: 400px;
-			background: blue;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title>VM File System</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-<!-- <div class="action-menu">
- --><!-- files -->
-<!-- <img src="http://lorempixel.com/400/200"/><br> -->
-<input class="send" data-type="file" data-name="pic.jpg" data-currentDir="/" value="view" type="button" />
-<!-- <input class="send" data-type="file" data-name="pic.jpg" value="copy" type="button" />
-<input class="send" data-type="file" data-name="pic.jpg" value="paste" type="button" />
-<input class="send" data-type="file" data-name="pic.jpg" value="delete" type="button" />
+    <div id="vm-info">
+        <p>$VM Name</p>
+        <p>$IP Address</p>
+    </div>
+    <div id="new-section">
+        <input type="button" value="+ Add File">
+        <input type="button" value="+ Add Folder">
+    </div>
+    <div id="file-system">
+	<input class="send" data-type="file" data-name="pic.jpg" value="view" type="button" />
 
-<input class="send" data-type="file" data-name="pic.jpg" value="make" type="button" />
-<input class="send" data-type="file" data-name="pic.jpg" value="move" type="button" />
-<input class="send" data-type="file" data-name="pic.jpg" value="rename" type="button" /> -->
-</div>
+        <ul class="list">
 
-<br>
-<!-- folders -->
-<!-- <div id="folder"> </div><br>
-<input class="send" data-type="folder" data-name="folderName" value="view" type="button" />
-<input class="send" data-type="folder" data-name="folderName" value="copy" type="button" />
-<input class="send" data-type="folder" data-name="folderName" value="paste" type="button" />
-<input class="send" data-type="folder" data-name="folderName" value="delete" type="button" />
+        </ul>
 
-<input class="send" data-type="folder" data-name="folderName" value="make" type="button" />
-<input class="send" data-type="folder" data-name="folderName" value="rename" type="button" />
-<input class="send" data-type="folder" data-name="folderName" value="move" type="button" />
- -->
+    </div>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
 </body>
 <script>
 	
+
 function iterate(className) {
  	var list = document.getElementsByClassName(className);
  	return Object.keys(list).map((x)=> { return list[x]});
@@ -81,6 +71,9 @@ function createElements(info) {
 	iterate("action-menu").forEach((x)=> document.body.removeChild(x));
 
 	elements['filesAndFolders'].forEach((item)=>{
+	var li = document.createElement("li");
+	li.innerHTML = item.name;
+	li.className = item.type;
 
 	var menu = document.createElement("div");
 	menu.className = "action-menu"; 
@@ -96,7 +89,9 @@ function createElements(info) {
 			menu.appendChild(options);
 
 		});
-	document.body.appendChild(menu);
+		li.appendChild(menu);
+	var ul = document.getElementsByClassName("list")[0];
+	ul.appendChild(li);
 
 	})
 iterate("send").forEach((x)=> x.addEventListener("click", addListenerByData));
