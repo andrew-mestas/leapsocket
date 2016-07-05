@@ -1,4 +1,5 @@
 var express = require('express');
+var bodyParser = require('body-parser').json();
 
 var app = express();
 
@@ -10,8 +11,8 @@ app.get('/', function(req, res) {
 
 
 
-app.post('/view', function(req, res) {
-	console.log(req)
+app.post('/view',bodyParser, function(req, res) {
+	console.log(req.body.value);
   res.send("view");
 });
 
