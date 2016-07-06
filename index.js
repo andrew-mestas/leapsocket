@@ -7,43 +7,55 @@ app.use(express.static(__dirname + '/public'));
 
 
 function fileOrDirData(filenameStr){ 
+	if(filenameStr.split(".")[1] != "tab"){
 	var fileStat = fs.statSync(filenameStr);
+
 	if(fileStat.isFile()){
 		return {type: "file", name : filenameStr}
 	} else if(fileStat.isDirectory()){
 		return {type: "folder", name : filenameStr}
 	}
 }
+}
 
-function getFullDirData(dirPath) {
+function sendFolderData(dirPath, res) {
 	fs.readdir(dirPath, function(err, files){
+		if(!err){
   		var filesAndFolders = [];
   		files.forEach(function(filenameStr){
  			filePath = dirPath + filenameStr;
 			filesAndFolders.push(fileOrDirData(filePath));
   		});
-
-  		return {currentDir: dirPath, filesAndFolders : filesAndFolders}
+		}
+  		res.send({currentDir: dirPath, filesAndFolders : filesAndFolders});
   	});
 
 }
 
 
-app.get('/', function(req, res) {
+app.post('/', function(req, res) {
   	var dirPath = '/';
 	
-	dirData = getFullDirData(dirPath);
-	res.send(dirData);es.send("Hello World");
+	sendFolderData(dirPath, res);
+	// console.log(dirData)
+	// res.send(dirData);
 });
 
 app.post('/view', bodyParser, function(req, res) {
 	
-	filename = req.body.filename;
+	filename = req.body.filename + "/";
+	// filename.splice(0,1);
 	dir = req.body.currentDir;
+	// console.log(filename, dir)
+	if(dir.slice(dir.length - 1) == "/"){
+		dir = dir.split("");
+		dir.splice(dir.length - 1, 1);
+		dir = dir.join("");
+	}
 	var dirPath = dir + filename;
-	
-	dirData = getFullDirData(dirPath);
-	res.send(dirData);  	
+	console.log(dirPath)
+	sendFolderData(dirPath, res);
+	// res.send(dirData);  	
 });
 
 app.post('/copy', function(req, res) {
