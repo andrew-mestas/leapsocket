@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 
-<body>
+<body onload="generateRequestPost()">
     <div id="vm-info">
         <p>$VM Name</p>
         <p>$IP Address</p>
@@ -17,7 +17,7 @@
         <input type="button" value="+ Add Folder">
     </div>
     <div id="file-system">
-	<input class="send" data-type="file" data-name="pic.jpg" value="view" type="button" />
+	<input type="button" value="HOME" onclick="generateRequestPost()" />
 
         <ul class="list">
 
@@ -61,14 +61,28 @@ function generateRequest(filename, action, currentDir){
   xhttp.setRequestHeader("Content-type", "application/json");
   xhttp.send(JSON.stringify({filename: filename, currentDir: currentDir}));
 
+};
+
+function generateRequestPost(){
+	var xhttp = new XMLHttpRequest();
+	var url = "http://localhost:3000";
+    xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      createElements(xhttp.responseText);
+    }
+  };
+  xhttp.open("POST", url, true);
+  xhttp.send();
 
 };
 
 function createElements(info) {
 	var actions = ["view","copy","paste","delete","make","move","rename"];
 	var elements = JSON.parse(info);
-	
-	iterate("action-menu").forEach((x)=> document.body.removeChild(x));
+	var ul = document.getElementsByClassName("list")[0];
+
+	iterate("file").forEach((x)=> ul.removeChild(x));
+	iterate("folder").forEach((x)=> ul.removeChild(x));
 
 	elements['filesAndFolders'].forEach((item)=>{
 	var li = document.createElement("li");
@@ -84,7 +98,7 @@ function createElements(info) {
 			options.className = "send";
 			options.setAttribute("data-type", item.type);
 			options.setAttribute("data-name", item.name);
-			options.setAttribute("data-currentDir", elements["current"]);
+			options.setAttribute("data-currentDir", elements["currentDir"]);
 			options.value = actionName;
 			menu.appendChild(options);
 

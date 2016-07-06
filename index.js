@@ -5,40 +5,57 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res) {
-  res.send("Hello World");
-});
 
+function fileOrDirData(filenameStr){ 
+	if(filenameStr.split(".")[1] != "tab"){
+	var fileStat = fs.statSync(filenameStr);
 
-app.post('/view',bodyParser, function(req, res) {
+	if(fileStat.isFile()){
+		return {type: "file", name : filenameStr}
+	} else if(fileStat.isDirectory()){
+		return {type: "folder", name : filenameStr}
+	}
+}
+}
 
-  	var isFileOrDir = function(filenameStr){ 
-	 	var fileStat = fs.statSync(filenameStr);
-	 	if(fileStat.isFile()){
-	 		return {type: "file", name : filenameStr}
-		} else if(fileStat.isDirectory()){
-			return {type: "folder", name : filenameStr}
+function sendFolderData(dirPath, res) {
+	fs.readdir(dirPath, function(err, files){
+		if(!err){
+  		var filesAndFolders = [];
+  		files.forEach(function(filenameStr){
+ 			filePath = dirPath + filenameStr;
+			filesAndFolders.push(fileOrDirData(filePath));
+  		});
 		}
-  	}
-
-	fs.readdir("/", function(err, files){
-	var root = "/";
-	var currentDir = root ;
-  	var filesAndFolders = [];
-  	files.forEach(function(filenameStr){
-  		console.log(filenameStr)
- 		root += filenameStr;
-		filesAndFolders.push(isFileOrDir(root));
-
- 		root = "/";
-
-  	})
-
-  	res.send({current: currentDir, filesAndFolders : filesAndFolders})
+  		res.send({currentDir: dirPath, filesAndFolders : filesAndFolders});
   	});
 
+}
 
-	// });
+
+app.post('/', function(req, res) {
+  	var dirPath = '/';
+	
+	sendFolderData(dirPath, res);
+	// console.log(dirData)
+	// res.send(dirData);
+});
+
+app.post('/view', bodyParser, function(req, res) {
+	
+	filename = req.body.filename + "/";
+	// filename.splice(0,1);
+	dir = req.body.currentDir;
+	// console.log(filename, dir)
+	if(dir.slice(dir.length - 1) == "/"){
+		dir = dir.split("");
+		dir.splice(dir.length - 1, 1);
+		dir = dir.join("");
+	}
+	var dirPath = dir + filename;
+	console.log(dirPath)
+	sendFolderData(dirPath, res);
+	// res.send(dirData);  	
 });
 
 app.post('/copy', function(req, res) {
